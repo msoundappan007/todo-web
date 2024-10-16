@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .task { margin-bottom: 10px; }
+        .completed { text-decoration: line-through; color: grey; }
+        .logout-btn {
+            margin-top: 20px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Todo List for {{ current_user.username }}</h1>
+
+    <!-- Add New Task Form -->
+    <form method="post" action="/add_task">
+        <input type="text" name="task_name" placeholder="Enter a new task" required>
+        <button type="submit">Add Task</button>
+    </form>
+
+    <h2>Tasks</h2>
+    <ul>
+        {% for task in tasks %}
+            <li class="task {% if task.is_active == False %}completed{% endif %}">
+                {{ task.name }}
+                <form method="post" action="/toggle_task/{{ task.id }}" style="display:inline;">
+                    {% if task.is_active %}
+                        <button type="submit">Mark as Done</button>
+                    {% else %}
+                        <button type="submit">Mark as Active</button>
+                    {% endif %}
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <!-- Logout Button -->
+    <form action="/logout" method="post">
+        <button type="submit">Logout</button>
+    </form>
+    
+    <a href="/">Back to Home</a>
+</body>
+</html>
